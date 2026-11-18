@@ -1,4 +1,4 @@
-"""Rules for files in the shared data-source catalog (GitHub: GIS-CoScientist-catalog).
+"""Rules for files in the shared data-source catalog (GitHub: GIS-co-scientist-catalog).
 
 One copy of this file lives in the desktop app (agents/data_agent/catalog_rules.py)
 and an identical copy in the catalog repo (scripts/catalog_rules.py), so the app's
