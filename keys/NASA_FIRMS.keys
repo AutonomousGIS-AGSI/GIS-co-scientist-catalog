@@ -1,0 +1,6 @@
+[API_Key]
+NASA_FIRMS_key =
+
+[Links]
+website = https://firms.modaps.eosdis.nasa.gov/api/map_key/
+NASA_FIRMS_key = https://firms.modaps.eosdis.nasa.gov/api/map_key/

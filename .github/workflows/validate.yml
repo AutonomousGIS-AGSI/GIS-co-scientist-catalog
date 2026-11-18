@@ -1,0 +1,38 @@
+name: Check catalog
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+# Read-only: the check never writes to the repo. Pull requests from forks run
+# with GitHub's read-only token, so a submission can't change anything here.
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # Use the check from main, not the pull request's own copy, so a
+      # submission can't weaken the check that judges it.
+      - name: Check the files this pull request changes (with main's rules)
+        if: github.event_name == 'pull_request'
+        run: |
+          mkdir -p "$RUNNER_TEMP/checker"
+          git show "origin/${{ github.base_ref }}:scripts/validate_catalog.py" > "$RUNNER_TEMP/checker/validate_catalog.py"
+          git show "origin/${{ github.base_ref }}:scripts/catalog_rules.py" > "$RUNNER_TEMP/checker/catalog_rules.py"
+          python "$RUNNER_TEMP/checker/validate_catalog.py" --root "$GITHUB_WORKSPACE" --changed-from "origin/${{ github.base_ref }}"
+
+      - name: Check the whole catalog
+        if: github.event_name == 'push'
+        run: python scripts/validate_catalog.py
